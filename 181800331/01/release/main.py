@@ -12,7 +12,7 @@ import os
 import sys
 from gensim import corpora
 import numpy as np
-from .dcheck import process as pc, compare as cmp
+from dcheck import process as pc, compare as cmp
 
 stoplist = {
     '何处', '加以', '除', '以至于', '即', '而后', '宁可', '还', '二来', '为此', '照', '截至', '譬如', '同时', '为止', '除开', '继而', '惟其', '地', '难道说',
@@ -72,30 +72,43 @@ if __name__ == '__main__':
     ori_dic = corpora.Dictionary([texts[0]])
     smp_dic = corpora.Dictionary([texts[1]])
 
+    flag = True
+
     # get Jaccard index
     ori_set = set(ori_dic.token2id.keys())
     smp_set = set(smp_dic.token2id.keys())
 
-    inter = ori_set & smp_set
-    union = ori_set | smp_set
+    if len(ori_set) == 0 and len(smp_set) == 0:
+        flag = False
 
-    jc = len(inter) / len(union)
+    if flag:
+        inter = ori_set & smp_set
+        union = ori_set | smp_set
 
-    # get cosine similarity of the identical words
-    total = np.array([len(text) for text in texts])
-    frequency = cmp.get_tf(texts)
+        jc = len(inter) / len(union)
 
-    tf = np.zeros((len(frequency), len(inter)))
-    for i, word in enumerate(inter):
-        for j, fq in enumerate(frequency):
-            tf[j][i] = fq[word]
-    for i, cnt in enumerate(total):
-        tf[i] /= cnt
+        if jc != 0:
+            # get cosine similarity of the identical words
+            total = np.array([len(text) for text in texts])
+            frequency = cmp.get_tf(texts)
 
-    cs = np.dot(tf[0], tf[1]) / (np.linalg.norm(tf[0]) * np.linalg.norm(tf[1]))
+            tf = np.zeros((len(frequency), len(inter)))
+            for i, word in enumerate(inter):
+                for j, fq in enumerate(frequency):
+                    tf[j][i] = fq[word]
+            for i, cnt in enumerate(total):
+                tf[i] /= cnt
+
+            cs = np.dot(tf[0], tf[1]) / (np.linalg.norm(tf[0]) * np.linalg.norm(tf[1]))
+            rst = jc * cs
+
+        else:
+            rst = 0
+
+    else:
+        rst = 1
 
     # save the result
-    rst = jc * cs
     # print('{:.2f}'.format(rst))
     with open(rst_path, 'w', encoding='utf-8') as f:
         f.write('{:.2f}'.format(rst))
