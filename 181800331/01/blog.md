@@ -123,19 +123,19 @@ python -c "import pstats; p=pstats.Stats('profile.pstats'); p.strip_dirs(); p.so
 
 - 对个人数据的测试
 
-  ![image-20200920223153241](blog.assets/test_report.png)
+  ![test_report](blog.assets/test_report.png)
 
 - 对异常的测试
 
-  这部分看[下面](#4. 计算模块部分异常处理说明)。
+  这部分看[下面](#4-计算模块部分异常处理说明)。
 
 - 最后是测试执行文件
 
-  ![image-20200920223409546](blog.assets/main_test.png)
+  ![main_test](blog.assets/main_test.png)
 
   其中目录结构如下：
 
-  ![image-20200920223647225](blog.assets/directory.png)
+  ![directory](blog.assets/directory.png)
 
   使用[coverage](https://coverage.readthedocs.io/en/coverage-5.3/index.html)得到的测试覆盖率：
 
@@ -144,7 +144,7 @@ python -c "import pstats; p=pstats.Stats('profile.pstats'); p.strip_dirs(); p.so
   coverage html -i -d report
   ```
 
-  ![image-20200920224442584](blog.assets/report.png)
+  ![report](blog.assets/report.png)
 
   实际上测试覆盖率应该是$100\%$，因为`test_*.py`不是单独执行的，以下语句没有贡献：
 
@@ -154,7 +154,7 @@ python -c "import pstats; p=pstats.Stats('profile.pstats'); p.strip_dirs(); p.so
 
   糟心的是样例测试输出结果：
 
-  ![image-20200921020732890](blog.assets/output.png)
+  ![output](blog.assets/output.png)
 
   个人数据的结果就不放了，文档选得不太好，没多大意义。倒是这个样例！我有点方！！和各位大佬相比低了很多！！！刚拿到测试样例我还觉得这没有现实意义，有的文章一看就知道是合成的，句子就不是个句子。这样的测试数据不考察NLP中的语义关联问题，换句话说，上下文对于模型没有任何意义。但是，`orig_0.8_add.txt`和`orig_0.8_del.txt`的测试结果也太低了！只改动了$20\%$，结果却远低于$80\%$。这要是有标准答案不得被:hammer:
 
@@ -166,9 +166,9 @@ python -c "import pstats; p=pstats.Stats('profile.pstats'); p.strip_dirs(); p.so
   >
   > 删：国\假\我\想\出去\玩（相似度：0.50）
 
-  相似度也很低！这个例子同时也说明了上下文的重要性。我又好了
+  相似度也很低！这个例子同时也说明了上下文的重要性。
 
-  ![img](blog.assets/理直气壮.jpg)
+  ![理直气壮](blog.assets/理直气壮.jpg)
 
 ## 4. 计算模块部分异常处理说明
 
@@ -176,18 +176,18 @@ python -c "import pstats; p=pstats.Stats('profile.pstats'); p.strip_dirs(); p.so
 
   在`main.py`中使用`assert`：
 
-  ![image-20200921031148818](blog.assets/test_command2.png)
+  ![test_command2](blog.assets/test_command2.png)
 
   对应的单元测试样例：
 
-  ![image-20200921031400015](blog.assets/test_command.png)
+  ![test_command](blog.assets/test_command.png)
 
 - 命令行参数给出的文件路径不存在
   - 输入文件路径
   
     在`main.py`中使用`assert`：
   
-    ![image-20200921032347772](blog.assets/test_input_path2.png)
+    ![test_input_path2](blog.assets/test_input_path2.png)
   
     对应的单元测试样例：
   
@@ -197,17 +197,17 @@ python -c "import pstats; p=pstats.Stats('profile.pstats'); p.strip_dirs(); p.so
   
     在`main.py`中使用`try...except...`：
   
-    ![image-20200921032637491](blog.assets/test_output_path2.png)
+    ![test_output_path2](blog.assets/test_output_path2.png)
   
     对应的单元测试样例：
   
-    ![image-20200921032736918](blog.assets/test_output_path.png)
+    ![test_output_path](blog.assets/test_output_path.png)
   
 - 两篇完全不相同的文章相似度应为0.00
 
-  ![image-20200921033201772](blog.assets/test_noise.png)
+  ![test_noise](blog.assets/test_noise.png)
 
-  *这个测试处理得不好，应该要设定一个阈值，而不是直接判断是否为0.00。*
+  *这个测试处理得不好，应该要设定一个阈值，而不是直接判断是否为0.00。不过这么写能输出结果，之后再自己分析。马马虎虎过了吧。。*
 
 - 两篇完全相同的文章相似度应为1.00
 
@@ -219,7 +219,7 @@ python -c "import pstats; p=pstats.Stats('profile.pstats'); p.strip_dirs(); p.so
 
 - 两个文档都是空白的，无法计算Jaccard index，相似度为1.00
 
-  ![image-20200921034153552](blog.assets/test_blank2.png)
+  ![test_blank2](blog.assets/test_blank2.png)
 
   
 
@@ -251,7 +251,7 @@ python -c "import pstats; p=pstats.Stats('profile.pstats'); p.strip_dirs(); p.so
 ## 写在后面
 
 - 一开始看到题目是“论文查重”的OS：这是要训练一个神经网络模型？？？找数据集好麻烦:confused:。深入思考后发觉不对，测试就只输入两个文件，还没有给测试文章的主题范围，数据集难以建立。后来想用gensim里的模型，得到的结果却不是很理想，要么很接近$1$，要么很接近$0$（到现在还没整明白为啥:no_mouth:）。Deadline马上要到了，最后只好自己手写一个:pensive:。这次走了很多弯路，主要是因为**对需求的分析不够到位**。接触了很多新技术，学习时间比预估的长很多。
-- 谈谈我是怎么填PSP表的吧。这个模板已经很详细了，如果我自己设计可能就只有加粗的大框架。整体来看时间分配为**橄榄型**，开发最多，接下来依次为报告、计划。开发就不说了，注意**为设计文档、复审和测试留时间**。计划的话就**尽量快**，一开始不可能面面俱到。先动手，之后逢山开路遇水搭桥。至于报告，本着**开源精神**就认真一点啦，希望各位多提意见多交流~
+- 谈谈我是怎么填PSP表的吧。这个模板已经很详细了，如果我自己设计可能就只有加粗的大框架。整体来看时间分配为**鸡蛋型**，开发最多，接下来依次为报告、计划。开发就不说了，注意**为设计文档、复审和测试留时间**。计划的话就**尽量快**，一开始不可能面面俱到。先动手，之后逢山开路遇水搭桥。至于报告，本着**开源精神**就认真一点啦，希望各位多提意见多交流~
 - **收获：**
   - 性能分析：[cProfile](https://docs.python.org/3.9/library/profile.html) + [gprof2dot](https://github.com/jrfonseca/gprof2dot) + [Graphviz](https://graphviz.org)
   - 单元测试：[unittest](https://docs.python.org/3/library/unittest.html?highlight=unittest#module-unittest) + [coverage](https://coverage.readthedocs.io/en/coverage-5.3/index.html)
