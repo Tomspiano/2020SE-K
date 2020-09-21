@@ -81,7 +81,7 @@
 依次执行如下命令：
 
 ```bash
-python -m cProfile -o profile.pstats main.py ..\sample\sim_0.8\orig.txt ..\sample\sim_0.8\orig_0.8_mix.txt ..\output\sim_0.8\mix.txt
+python -m cProfile -o profile.pstats main.py ..\sample\sim_0.8\orig.txt ..\sample\sim_0.8\orig_0.8_mix.txt ..\output\mix.txt
 python -m gprof2dot -f pstats profile.pstats -o profile.dot
 dot -Tpng -o ..\blog.assets\profile_result.png profile.dot
 ```
@@ -109,7 +109,7 @@ python -c "import pstats; p=pstats.Stats('profile.pstats'); p.strip_dirs(); p.so
 
 ![cumulative](blog.assets/cumulative.png)
 
-如果要改进的话，看看[`jieba`源码](https://github.com/fxsjy/jieba)？开发者最近的commit都和[PaddlePaddle](https://www.paddlepaddle.org.cn/)深度学习相关，可神经网络的速度难以改进，除非换一个模型（扯远了这里没用到paddle模式）。还有一个思路是从Python的特性入手，应用一些[trick](https://www.cnblogs.com/taceywong/p/5773220.html)。自以为如果trick会降低可读性，那我可能不会采用。“Readability counts.”
+如果要改进的话，看看[源码](https://github.com/fxsjy/jieba)？开发者最近的commit都和[PaddlePaddle](https://www.paddlepaddle.org.cn/)深度学习相关，可神经网络的速度难以改进，除非换一个模型（扯远了这里没用到paddle模式）。还有一个思路是从Python的特性入手，应用一些[trick](https://www.cnblogs.com/taceywong/p/5773220.html)。自以为如果trick会降低可读性，那我可能不会采用。“Readability counts.”
 
 *这里挖个坑，回头看看[Decorators](https://www.runoob.com/w3cnote/python-func-decorators.html)怎么用。。。*
 
@@ -146,28 +146,40 @@ python -c "import pstats; p=pstats.Stats('profile.pstats'); p.strip_dirs(); p.so
 
   ![report](blog.assets/report.png)
 
-  实际上测试覆盖率应该是$100\%$，因为`test_*.py`不是单独执行的，以下语句没有贡献：
+  实际上，测试覆盖率应该为$100\%$。代码没有被测试到是因为它们在`main`函数中，没有单独执行文件的话是不会运行的。
 
-  ![missing](blog.assets/missing.png)
+  `test_*.py`：
 
+  ![test](blog.assets/test.png)
+
+  `process.py`：这是预处理，用来手动生成停用词表，不用进行测试。
+
+  ![get_stopwords](blog.assets/get_stopwords.png)
+
+  ![process](blog.assets/process.png)
+
+  `main.py`：用`os.system()`传参导致这部分没有测试到。但是从下面的异常处理中可知，这段代码可执行。
+  
+  ![main](blog.assets/main.png)
+  
   ---
 
   糟心的是样例测试输出结果：
 
   ![output](blog.assets/output.png)
-
+  
   个人数据的结果就不放了，文档选得不太好，没多大意义。倒是这个样例！我有点方！！和各位大佬相比低了很多！！！刚拿到测试样例我还觉得这没有现实意义，有的文章一看就知道是合成的，句子就不是个句子。这样的测试数据不考察NLP中的语义关联问题，换句话说，上下文对于模型没有任何意义。但是，`orig_0.8_add.txt`和`orig_0.8_del.txt`的测试结果也太低了！只改动了$20\%$，结果却远低于$80\%$。这要是有标准答案不得被:hammer:
-
+  
   但是仔细想想，这个结果也是可以接受的。`jieba`是根据词频来分词的，文章经过增减，分出来的词变化可能很大。例如：
-
+  
   > 原：国庆\放假\我\想\出去\玩
   >
   > 增：国家\庆典\放假\我\想\出去\玩（相似度：0.62）
   >
   > 删：国\假\我\想\出去\玩（相似度：0.50）
-
+  
   相似度也很低！这个例子同时也说明了上下文的重要性。
-
+  
   ![理直气壮](blog.assets/理直气壮.jpg)
 
 ## 4. 计算模块部分异常处理说明
@@ -203,11 +215,13 @@ python -c "import pstats; p=pstats.Stats('profile.pstats'); p.strip_dirs(); p.so
   
     ![test_output_path](blog.assets/test_output_path.png)
   
-- 两篇完全不相同的文章相似度应为0.00
+- 测试`main.py`能否正常执行
+
+  ![test_work](blog.assets/test_work.png)
+
+- 两篇完全不相同的文章相似度应接近0.00
 
   ![test_noise](blog.assets/test_noise.png)
-
-  *这个测试处理得不好，应该要设定一个阈值，而不是直接判断是否为0.00。不过这么写能输出结果，之后再自己分析。马马虎虎过了吧。。*
 
 - 两篇完全相同的文章相似度应为1.00
 
