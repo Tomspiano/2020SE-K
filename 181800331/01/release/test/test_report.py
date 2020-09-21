@@ -1,10 +1,13 @@
 import unittest
 import os
+import sys
+
+sys.path.append('../')
+from main import duplicate_check
 
 pre = '../../sample/report/'
-rst = '../../output/report/'
-smp_path = pre + 'query.txt'
-sum_path = rst + 'summary.txt'
+smp_path = ''.join([pre, 'query.txt'])
+sum_path = '../../output/report.txt'
 
 
 class MyTestCase(unittest.TestCase):
@@ -17,58 +20,53 @@ class MyTestCase(unittest.TestCase):
 
     @staticmethod
     def test_1():
-        ori_path = pre + 'orig1.txt'
-        rst_path = rst + 'report1.txt'
+        ori_path = ''.join([pre, 'orig1.txt'])
 
-        print('testing ' + os.path.basename(smp_path) + ' and ' + os.path.basename(ori_path) + ':')
-        os.system('python ../main.py ' + ori_path + ' ' + smp_path + ' ' + rst_path)
+        print(' '.join(['testing', os.path.basename(smp_path), 'and', os.path.basename(ori_path)]) + ':')
+        sim = duplicate_check([ori_path, smp_path])
 
-        with open(rst_path, 'r', encoding='utf-8') as r, open(sum_path, 'a', encoding='utf-8') as s:
-            s.write('test1: ' + r.read())
+        with open(sum_path, 'a', encoding='utf-8') as s:
+            s.write('test1: {:.2f}\n'.format(sim))
 
     @staticmethod
     def test_2():
-        ori_path = pre + 'orig2.txt'
-        rst_path = rst + 'report2.txt'
+        ori_path = ''.join([pre, 'orig2.txt'])
 
-        print('testing ' + os.path.basename(smp_path) + ' and ' + os.path.basename(ori_path) + ':')
-        os.system('python ../main.py ' + ori_path + ' ' + smp_path + ' ' + rst_path)
+        print(' '.join(['testing', os.path.basename(smp_path), 'and', os.path.basename(ori_path)]) + ':')
+        sim = duplicate_check([ori_path, smp_path])
 
-        with open(rst_path, 'r', encoding='utf-8') as r, open(sum_path, 'a', encoding='utf-8') as s:
-            s.write('test2: ' + r.read())
+        with open(sum_path, 'a', encoding='utf-8') as s:
+            s.write('test2: {:.2f}\n'.format(sim))
 
     @staticmethod
     def test_3():
-        ori_path = pre + 'orig3.txt'
-        rst_path = rst + 'report3.txt'
+        ori_path = ''.join([pre, 'orig3.txt'])
 
-        print('testing ' + os.path.basename(smp_path) + ' and ' + os.path.basename(ori_path) + ':')
-        os.system('python ../main.py ' + ori_path + ' ' + smp_path + ' ' + rst_path)
+        print(' '.join(['testing', os.path.basename(smp_path), 'and', os.path.basename(ori_path)]) + ':')
+        sim = duplicate_check([ori_path, smp_path])
 
-        with open(rst_path, 'r', encoding='utf-8') as r, open(sum_path, 'a', encoding='utf-8') as s:
-            s.write('test3: ' + r.read())
+        with open(sum_path, 'a', encoding='utf-8') as s:
+            s.write('test3: {:.2f}\n'.format(sim))
 
     @staticmethod
     def test_4():
-        ori_path = pre + 'orig4.txt'
-        rst_path = rst + 'report4.txt'
+        ori_path = ''.join([pre, 'orig4.txt'])
 
-        print('testing ' + os.path.basename(smp_path) + ' and ' + os.path.basename(ori_path) + ':')
-        os.system('python ../main.py ' + ori_path + ' ' + smp_path + ' ' + rst_path)
+        print(' '.join(['testing', os.path.basename(smp_path), 'and', os.path.basename(ori_path)]) + ':')
+        sim = duplicate_check([ori_path, smp_path])
 
-        with open(rst_path, 'r', encoding='utf-8') as r, open(sum_path, 'a', encoding='utf-8') as s:
-            s.write('test4: ' + r.read())
+        with open(sum_path, 'a', encoding='utf-8') as s:
+            s.write('test4: {:.2f}\n'.format(sim))
 
     @staticmethod
     def test_5():
-        ori_path = pre + 'orig5.txt'
-        rst_path = rst + 'report5.txt'
+        ori_path = ''.join([pre, 'orig5.txt'])
 
-        print('testing ' + os.path.basename(smp_path) + ' and ' + os.path.basename(ori_path) + ':')
-        os.system('python ../main.py ' + ori_path + ' ' + smp_path + ' ' + rst_path)
+        print(' '.join(['testing', os.path.basename(smp_path), 'and', os.path.basename(ori_path)]) + ':')
+        sim = duplicate_check([ori_path, smp_path])
 
-        with open(rst_path, 'r', encoding='utf-8') as r, open(sum_path, 'a', encoding='utf-8') as s:
-            s.write('test5: ' + r.read())
+        with open(sum_path, 'a', encoding='utf-8') as s:
+            s.write('test5: {:.2f}\n'.format(sim))
 
 
 if __name__ == '__main__':

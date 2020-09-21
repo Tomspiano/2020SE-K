@@ -52,31 +52,40 @@ stoplist = {
     '这个', '至', '一旦', '嗡嗡', '们', '在下', '把', '甚且', '这', '纵', '要不是', '这一来', '而且', '你们', '而后'
 }
 
+
+def duplicate_check(paths):
+    """ Get similarity of the two documents.
+
+    :param paths: [original document, sample document]
+    :return: similarity of the two documents
+    """
+
+    assert os.path.isfile(paths[0]), 'Please check the path of the original document.'
+    assert os.path.isfile(paths[1]), 'Please check the path of the sample document.'
+
+    # process the documents
+    texts = pc.segment(paths, stoplist)
+
+    # get similarity
+    return cmp.get_sim(texts)
+
+
 if __name__ == '__main__':
     # read command
     assert len(
             sys.argv) == 4, 'Please use the format: python main.py [original document] [sample document] ' \
                             '[evaluation result]'
-    assert \
-        os.path.exists(sys.argv[1]) and os.path.exists(sys.argv[2]), 'There is no such document.'
-    assert \
-        os.path.isfile(sys.argv[1]) and os.path.isfile(sys.argv[2]), 'This is not a document'
-    ori_path = sys.argv[1]
-    smp_path = sys.argv[2]
-    rst_path = sys.argv[3]
+    ori = sys.argv[1]
+    smp = sys.argv[2]
+    rst = sys.argv[3]
 
-    # process the documents
-    path = [ori_path, smp_path]
-    texts = pc.segment(path, stoplist)
-
-    # get similarity
-    rst = cmp.get_sim(texts)
+    sim = duplicate_check([ori, smp])
 
     # save the result
     try:
-        with open(rst_path, 'w', encoding='utf-8') as f:
-            f.write('{:.2f}\n'.format(rst))
-    except:
+        with open(rst, 'w', encoding='utf-8') as f:
+            f.write('{:.2f}'.format(sim))
+    except FileNotFoundError:
         print('Path does NOT exist! The result is saved in the current path named output.txt!')
         with open('output.txt', 'w', encoding='utf-8') as f:
-            f.write('{:.2f}\n'.format(rst))
+            f.write('{:.2f}'.format(sim))

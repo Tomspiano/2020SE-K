@@ -1,10 +1,12 @@
 import unittest
 import os
+import sys
+
+sys.path.append('../')
+from main import duplicate_check
 
 pre = '../../sample/error/'
-rst = '../../output/error/'
-ori_path = pre + 'query.txt'
-sum_path = rst + 'summary.txt'
+ori_path = ''.join([pre, 'query.txt'])
 
 
 class MyTestCase(unittest.TestCase):
@@ -15,64 +17,72 @@ class MyTestCase(unittest.TestCase):
         print('done!')
         print('------------------------------')
 
-    def test_command(self):
+    @staticmethod
+    def test_command():
         print('testing command format error:')
-        os.system('python ../main.py ' + ori_path)
+        os.system(' '.join(['python ../main.py', ori_path]))
 
-    def test_input_path(self):
+    @staticmethod
+    def test_input_path1():
         smp_path = './path/error.txt'
-        rst_path = rst + 'input_path.txt'
 
-        print('testing path error:')
-        os.system('python ../main.py ' + ori_path + ' ' + smp_path + ' ' + rst_path)
+        print('testing if path exists:')
+        duplicate_check([smp_path, ori_path])
 
-    def test_output_path(self):
-        smp_path = pre + 'noise.txt'
+    @staticmethod
+    def test_input_path2():
+        smp_path = '.'
+
+        print('testing if file exists:')
+        duplicate_check([ori_path, smp_path])
+
+    @staticmethod
+    def test_output_path():
+        smp_path = ''.join([pre, 'noise.txt'])
         rst_path = './path/output_path.txt'
 
-        print('testing path error:')
-        os.system('python ../main.py ' + ori_path + ' ' + smp_path + ' ' + rst_path)
+        print('testing output path error:')
+        os.system(' '.join(['python ../main.py', ori_path, smp_path, rst_path]))
+
+    @staticmethod
+    def test_work():
+        smp_path = ''.join([pre, 'noise.txt'])
+        rst_path = '../../output/work.txt'
+
+        print('testing feasibility:')
+        os.system(' '.join(['python ../main.py', ori_path, smp_path, rst_path]))
 
     def test_noise(self):
-        smp_path = pre + 'noise.txt'
-        rst_path = rst + 'noise.txt'
+        smp_path = ''.join([pre, 'noise.txt'])
 
-        print('testing ' + os.path.basename(smp_path) + ' and ' + os.path.basename(ori_path) + ':')
-        os.system('python ../main.py ' + ori_path + ' ' + smp_path + ' ' + rst_path)
+        print(' '.join(['testing', os.path.basename(smp_path), 'and', os.path.basename(ori_path)]) + ':')
+        sim = duplicate_check([ori_path, smp_path])
 
-        with open(rst_path, 'r', encoding='utf-8') as r:
-            self.assertEqual(eval(r.read().strip()), 0.0, msg='Error! They have nothing in common!')
+        self.assertLess(sim, 0.05, msg='Error! They have nothing in common!')
 
     def test_same(self):
         smp_path = ori_path
-        rst_path = rst + 'same.txt'
 
-        print('testing ' + os.path.basename(smp_path) + ' and ' + os.path.basename(ori_path) + ':')
-        os.system('python ../main.py ' + ori_path + ' ' + smp_path + ' ' + rst_path)
+        print(' '.join(['testing', os.path.basename(smp_path), 'and', os.path.basename(ori_path)]) + ':')
+        sim = duplicate_check([ori_path, smp_path])
 
-        with open(rst_path, 'r', encoding='utf-8') as r:
-            self.assertEqual(eval(r.read().strip()), 1.0, msg='Error! They are the same documents!')
+        self.assertEqual(sim, 1.0, msg='Error! They are the same documents!')
 
     def test_blank(self):
-        smp_path = pre + 'blank.txt'
-        rst_path = rst + 'blank.txt'
+        smp_path = ''.join([pre, 'blank.txt'])
 
-        print('testing ' + os.path.basename(smp_path) + ' and ' + os.path.basename(ori_path) + ':')
-        os.system('python ../main.py ' + ori_path + ' ' + smp_path + ' ' + rst_path)
+        print(' '.join(['testing', os.path.basename(smp_path), 'and', os.path.basename(ori_path)]) + ':')
+        sim = duplicate_check([ori_path, smp_path])
 
-        with open(rst_path, 'r', encoding='utf-8') as r:
-            self.assertEqual(eval(r.read().strip()), 0.0, msg='Error! One of the documents is blank!')
+        self.assertEqual(sim, 0.0, msg='Error! One of the documents is blank!')
 
     def test_blank2(self):
-        ori_path = pre + 'blank.txt'
-        smp_path = pre + 'blank.txt'
-        rst_path = rst + 'blank2.txt'
+        smp_path = ''.join([pre, 'blank.txt'])
 
-        print('testing ' + os.path.basename(smp_path) + ' and ' + os.path.basename(ori_path) + ':')
-        os.system('python ../main.py ' + ori_path + ' ' + smp_path + ' ' + rst_path)
+        print(' '.join(['testing', os.path.basename(smp_path), 'and', os.path.basename(ori_path)]) + ':')
+        sim = duplicate_check([smp_path, smp_path])
 
-        with open(rst_path, 'r', encoding='utf-8') as r:
-            self.assertEqual(eval(r.read().strip()), 1.0, msg='Error! They are blank documents!')
+        self.assertEqual(sim, 1.0, msg='Error! They are blank documents!')
 
 
 if __name__ == '__main__':
