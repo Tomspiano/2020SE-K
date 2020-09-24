@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$">
+    <content url="file://$MODULE_DIR$/../plagiarism-checker">
       <sourceFolder url="file://$MODULE_DIR$/181800331/01/release" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../plagiarism-checker/181800331/release" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.7 (se)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

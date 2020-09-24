@@ -1,4 +1,4 @@
-:point_right: 这里先附上[Github Repo地址](https://github.com/Tomspiano/2020SE-K/tree/master/181800331/01)和[作业地址](https://edu.cnblogs.com/campus/fzu/FZU_SE_KClass/homework/11118) :point_left:
+:point_right: 这里先附上[Github Repo地址](https://github.com/Tomspiano/plagiarism-checker)和[作业地址](https://edu.cnblogs.com/campus/fzu/FZU_SE_KClass/homework/11118) :point_left:
 
 # 需求
 

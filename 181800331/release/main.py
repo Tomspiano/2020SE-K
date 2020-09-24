@@ -3,7 +3,7 @@
 Created on 2020/9/12
 @Author: Tomspiano
 @Email: wengenhui.gracie@foxmail.com
-@Project: 2020SE-K
+@Project: plagiarism-checker
 @Product: PyCharm
 @Description: plagiarism detection
 """

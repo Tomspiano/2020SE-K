@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/2020SE-K.iml" filepath="$PROJECT_DIR$/.idea/2020SE-K.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../plagiarism-checker/.idea/plagiarism-checker.iml" filepath="$PROJECT_DIR$/../plagiarism-checker/.idea/plagiarism-checker.iml" />
     </modules>
   </component>
 </project>
